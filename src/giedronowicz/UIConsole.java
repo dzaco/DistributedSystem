@@ -18,6 +18,9 @@ public class UIConsole {
 
     public void help() {
         logger.help("Available commands:");
+        logger.help("exit\t- request for close client process",true);
+        logger.help("help or h\t- request for display this help section",true);
+        logger.help("off\t- request for shutdown server",true);
         logger.help("pow\t-e.g. pow 3 - request for power method", true);
     }
 
