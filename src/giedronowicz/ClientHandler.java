@@ -26,21 +26,36 @@ public class ClientHandler implements Runnable {
         logger.info("Handle client: " + client);
         try {
             while(true) {
-                String request = in.readLine();
-                if(request == null) continue;
-                if (request.equals("exit")){
-                    logger.info("One of the clients is off now");
-                    Server.remove(client);
-                }
-                else if(request.equals("off")) {
-                    Server.off();
-                    System.exit(0);
-                }
+//                String request = in.readLine();
+//                if(request == null) continue;
+//                if (request.equals("exit")){
+//                    logger.info("One of the clients is off now");
+//                    Server.remove(client);
+//                }
+//                else if(request.equals("off")) {
+//                    Server.off();
+//                    System.exit(0);
+//                }
+//
+//                Server.extractNumber(request)
+//                        .ifPresent(number -> {
+//                            Server.sendMsg(out, Server.powMsg(number));
+//                        });
 
-                Server.extractNumber(request)
-                        .ifPresent(number -> {
-                            Server.sendMsg(out, Server.powMsg(number));
-                        });
+                String request = in.readLine();
+                logger.info("Request: " + request);
+                switch (request) {
+                    case "exit" -> {
+                        logger.info("One of the clients is off now");
+                        Server.remove(client);
+                    }
+                    case "off" -> {
+                        logger.info("Client " + client + " shutdown this server");
+                        Server.off();
+                    }
+                    case "pow" -> PowService.pow(4);
+//                    default ->
+                }
             }
 
         }

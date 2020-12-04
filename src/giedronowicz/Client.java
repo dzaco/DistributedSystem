@@ -26,8 +26,8 @@ public class Client {
                     exit(out);
                     break mainLoop;
                 }
-                case "off" -> sendRequest(out, "off");
-                default -> sendNumber(out);
+                case "help", "h" -> console.help();
+                default -> sendRequest(out, request);
             }
 
 
