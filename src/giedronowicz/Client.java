@@ -15,32 +15,26 @@ public class Client {
 
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        Scanner keyboard = new Scanner(System.in);
+        UIConsole console = new UIConsole();
 
         mainLoop:
         while (true) {
-            System.out.println(">");
             // request
-            displayMenu();
-            System.out.print("Action: ");
-            switch (keyboard.next()) {
-                case "0" -> {
+            String request = console.getRequest();
+            switch (request) {
+                case "exit" -> {
                     exit(out);
                     break mainLoop;
                 }
                 case "off" -> sendRequest(out, "off");
-                case "1" -> sendNumber(out);
-                default -> {
-                    logger.error("Unknown request\tLunch main feature - power number");
-                    sendNumber(out);
-                }
+                default -> sendNumber(out);
             }
 
 
             // response
-            String str = in.readLine();
-            logger.info(str, "Server");
-            if(str.equals("off"))
+            String response = in.readLine();
+            logger.info(response, "Server");
+            if(response.equals("off"))
                 break;
 
         }
@@ -53,11 +47,6 @@ public class Client {
 
     }
 
-    public static void displayMenu() {
-        System.out.format("%10s %n", "MENU");
-        System.out.format("%-4s %-10s %n", "0.", "Exit");
-        System.out.format("%-4s %-10s %n", "1.", "Number");
-    }
 
     public static void exit(PrintWriter out) {
         logger.info("Sending the exit request");

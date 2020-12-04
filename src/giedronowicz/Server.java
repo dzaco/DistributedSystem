@@ -22,7 +22,6 @@ public class Server {
             logger.info("Waiting for a Client...");
             // waiting for socket
             Socket client = server.accept();
-            System.out.println("[SERVER]\tClient connected");
             logger.info("Client connected");
 
             ClientHandler clientHandler = new ClientHandler(client);
@@ -39,29 +38,30 @@ public class Server {
         int number = 0;
         try { // is number ?
             number = Integer.parseInt(request);
-            System.out.println("[SERVER]\tClient sent the number = " + number);
+            logger.info("Client sent the number = " + number);
+
             return Optional.of(number);
         } catch (Exception e) {
-            System.out.println("[SERVER]\tRequest is not a number");
+            logger.error("Request is not a number");
             return Optional.empty();
         }
     }
 
     public static String powMsg(int number){
-        System.out.println("[SERVER]\tCalculate power for number = " + number);
+        logger.info("Calculate power for number = " + number);
         return number + "^2 = " + number * number;
     }
 
     public static void sendMsg(PrintWriter out, String msg) {
-        System.out.println("[SERVER]\tResponse message: " + msg);
+        logger.info("Response message: " + msg);
         out.println(msg);
         out.flush();
     }
 
     public static void remove(Socket client) {
         clients.removeIf(clientHandler -> clientHandler.getClient() == client);
-        System.out.println("[SERVER] Removed client from list");
-        System.out.println("[SERVER]\tTotal number of clients: " + clients.size() );
+        logger.info("Removed client from list");
+        logger.info("Total number of clients: " + clients.size() );
     }
 
     public static void off() throws IOException {
