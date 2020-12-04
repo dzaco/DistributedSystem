@@ -8,9 +8,6 @@ public class Logger {
     private Logger(Class c ) {
         name = c.getSimpleName();
     }
-    private Logger(Client c ) {
-        name = c.getClass().getSimpleName();
-    }
     private Logger() {
         name = Logger.class.getSimpleName();
     }
@@ -33,9 +30,8 @@ public class Logger {
         if(nextLine)
             System.out.format("%-30s %-20s %n", "", msg);
         else
-            System.out.format("%-30s %-20s", "["+ name +"]", msg);
+            info(msg);
     }
-
     public void info(String msg, String from) {
         System.out.format("%-30s %-20s %n", "["+ from +"]", msg);
     }
@@ -51,5 +47,11 @@ public class Logger {
     }
 
 
+    public void response(String msg) {
+        this.info(msg,"ServerResponse");
+    }
 
+    public void type(String msg) {
+        System.out.format("%-30s %-20s", "", msg);
+    }
 }
