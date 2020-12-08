@@ -2,22 +2,29 @@ package giedronowicz.server;
 
 import java.io.IOException;
 import java.lang.ref.Reference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 public class Request {
     private final String raw;
-    private String[] data;
-    private int commandIndex, paramIndex, optionIndex;
+    private Map<Index,String> map;
+
+    private enum Index {
+        COMMAND, PARAM, OPTION;
+    }
 
     public Request(String raw) throws IOException {
         if(raw == null)
             throw new IOException("Request is null");
         this.raw = raw;
-        this.data = this.raw.split(" ");
-        this.commandIndex = 0;
-        this.paramIndex = data.length  > 0 ? 1 : -1;
-        this.optionIndex = data.length > 1 ? 2 : -1;
+
+        String[] data = this.raw.split(" ");
+        this.map = new HashMap<>();
+        for (int i = 0; i < data.length; i++) {
+            map.put(Index.values()[i], data[i]);
+        }
     }
 
     public String getRaw() {
@@ -25,17 +32,18 @@ public class Request {
     }
 
     public String getCommand() {
-        return data[commandIndex];
+        return this.map.get(Index.COMMAND);
     }
-
     public Optional<String> getParam() {
-        return paramIndex != -1 ? Optional.of(data[paramIndex]) : Optional.empty();
+        return this.get(Index.PARAM);
     }
-
     public Optional<String> getOption() {
-        return optionIndex != -1 ? Optional.of(data[optionIndex]) : Optional.empty();
+        return this.get(Index.OPTION);
     }
 
-
+    private Optional<String> get(Index index) {
+        return this.map.get(index) != null ?
+                Optional.ofNullable(this.map.get(index)) : Optional.empty();
+    }
 
 }

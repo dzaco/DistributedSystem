@@ -46,7 +46,10 @@ public class ClientHandler implements Runnable {
                     case "pow" -> {
                         var res = request.getParam().map(PowService::pow);
                         if(res.isPresent()) yield String.valueOf(res.get());
-                        else throw new IOException("Failed work with param");
+                        else {
+                            logger.error("Command need parameter");
+                            yield "Command need parameter";
+                        }
                     }
 
                     default -> {
