@@ -1,11 +1,15 @@
-package giedronowicz;
+package giedronowicz.server;
+
+import giedronowicz.client.ClientHandler;
+import giedronowicz.client.ClientTCP;
+import giedronowicz.client.IClient;
+import giedronowicz.console.Logger;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

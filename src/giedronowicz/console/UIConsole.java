@@ -1,4 +1,4 @@
-package giedronowicz;
+package giedronowicz.console;
 
 import java.util.Scanner;
 

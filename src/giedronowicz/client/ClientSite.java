@@ -1,11 +1,10 @@
-package giedronowicz;
+package giedronowicz.client;
 
-import java.io.BufferedReader;
+import giedronowicz.console.Logger;
+import giedronowicz.console.UIConsole;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientSite {
     private static Logger logger = Logger.of(ClientSite.class);

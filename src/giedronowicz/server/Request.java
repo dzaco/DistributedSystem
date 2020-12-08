@@ -1,4 +1,4 @@
-package giedronowicz;
+package giedronowicz.server;
 
 import java.io.IOException;
 import java.lang.ref.Reference;

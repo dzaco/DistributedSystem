@@ -1,4 +1,6 @@
-package giedronowicz;
+package giedronowicz.server;
+
+import giedronowicz.console.Logger;
 
 public class PowService{
     private static final Logger logger = Logger.of(PowService.class);

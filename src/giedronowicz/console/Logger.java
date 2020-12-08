@@ -1,4 +1,4 @@
-package giedronowicz;
+package giedronowicz.console;
 
 public class Logger {
     private static Logger instance = null;

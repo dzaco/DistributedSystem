@@ -1,4 +1,6 @@
-package giedronowicz;
+package giedronowicz.client;
+
+import giedronowicz.console.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;

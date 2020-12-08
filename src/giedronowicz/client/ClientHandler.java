@@ -1,11 +1,11 @@
-package giedronowicz;
+package giedronowicz.client;
 
-import java.io.BufferedReader;
+import giedronowicz.console.Logger;
+import giedronowicz.server.PowService;
+import giedronowicz.server.Request;
+import giedronowicz.server.Server;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Optional;
 
 public class ClientHandler implements Runnable {
 
