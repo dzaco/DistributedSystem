@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
-    private static final Logger logger = Logger.of(Server.class);
+public class ServerTCP {
+    private static final Logger logger = Logger.of(ServerTCP.class);
     private static List<ClientHandler> clients = new ArrayList<>();
     private static ExecutorService pool = Executors.newFixedThreadPool(4);
 

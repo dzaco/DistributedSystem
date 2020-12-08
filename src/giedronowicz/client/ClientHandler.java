@@ -3,7 +3,7 @@ package giedronowicz.client;
 import giedronowicz.console.Logger;
 import giedronowicz.server.PowService;
 import giedronowicz.server.Request;
-import giedronowicz.server.Server;
+import giedronowicz.server.ServerTCP;
 
 import java.io.IOException;
 
@@ -35,12 +35,12 @@ public class ClientHandler implements Runnable {
                 String response = switch (request.getCommand()) {
                     case "exit" -> {
                         logger.info("One of the clients is off now");
-                        Server.remove(client);
+                        ServerTCP.remove(client);
                         yield request.getCommand();
                     }
                     case "off" -> {
                         logger.info("Client " + client + " shutdown this server");
-                        Server.off();
+                        ServerTCP.off();
                         yield request.getCommand();
                     }
                     case "pow" -> {
@@ -58,7 +58,7 @@ public class ClientHandler implements Runnable {
                     }
                 };
 
-                Server.send(client, response);
+                ServerTCP.send(client, response);
                 
             }
 
