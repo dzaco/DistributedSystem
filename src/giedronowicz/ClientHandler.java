@@ -9,15 +9,17 @@ import java.util.Optional;
 
 public class ClientHandler implements Runnable {
 
-    private final Socket client;
-    private final BufferedReader in;
-    private final PrintWriter out;
+    private final IClient client;
+//    private final BufferedReader in;
+//    private final PrintWriter out;
     private static final Logger logger = Logger.of(ClientHandler.class);
 
-    public ClientHandler(Socket clientSocket) throws IOException {
+    public ClientHandler(IClient clientSocket) throws IOException {
         client = clientSocket;
-        in = new BufferedReader( new InputStreamReader(client.getInputStream()));
-        out = new PrintWriter( client.getOutputStream() );
+    }
+
+    public IClient getClient() {
+        return this.client;
     }
 
     @Override
@@ -26,46 +28,45 @@ public class ClientHandler implements Runnable {
         logger.info("Handle client: " + client);
         try {
             while(true) {
-//                String request = in.readLine();
-//                if(request == null) continue;
-//                if (request.equals("exit")){
-//                    logger.info("One of the clients is off now");
-//                    Server.remove(client);
-//                }
-//                else if(request.equals("off")) {
-//                    Server.off();
-//                    System.exit(0);
-//                }
-//
-//                Server.extractNumber(request)
-//                        .ifPresent(number -> {
-//                            Server.sendMsg(out, Server.powMsg(number));
-//                        });
 
-                String request = in.readLine();
+                Request request = new Request(client.read());
                 logger.info("Request: " + request);
-                switch (request) {
+
+                String response = switch (request.getCommand()) {
                     case "exit" -> {
                         logger.info("One of the clients is off now");
                         Server.remove(client);
+                        yield request.getCommand();
                     }
                     case "off" -> {
                         logger.info("Client " + client + " shutdown this server");
                         Server.off();
+                        yield request.getCommand();
                     }
-                    case "pow" -> PowService.pow(4);
-//                    default ->
-                }
+                    case "pow" -> {
+                        var res = request.getParam().map(PowService::pow);
+                        if(res.isPresent()) yield String.valueOf(res.get());
+                        else throw new IOException("Failed work with param");
+                    }
+
+                    default -> {
+                        logger.error("Unknown command");
+                        yield "Unknown command";
+                    }
+                };
+
+                Server.send(client, response);
+                
             }
 
         }
         catch (IOException e){
             logger.error("Throws IOException");
+            logger.error(e.getMessage());
         }
         finally {
-            out.close();
             try {
-                in.close();
+                client.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -73,8 +74,6 @@ public class ClientHandler implements Runnable {
 
     }
 
-    public Socket getClient() {
-        return this.client;
-    }
+
 
 }

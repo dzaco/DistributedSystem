@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,7 +20,7 @@ public class Server {
         while (true) {
             logger.info("Waiting for a Client...");
             // waiting for socket
-            Socket client = server.accept();
+            IClient<Socket> client = new ClientTCP( server.accept() );
             logger.info("Client connected");
 
             ClientHandler clientHandler = new ClientHandler(client);
@@ -34,40 +33,21 @@ public class Server {
 
     }
 
-    public static Optional<Integer> extractNumber(String request) {
-        int number = 0;
-        try { // is number ?
-            number = Integer.parseInt(request);
-            logger.info("Client sent the number = " + number);
-
-            return Optional.of(number);
-        } catch (Exception e) {
-            logger.error("Request is not a number");
-            return Optional.empty();
-        }
+    public static void send(IClient client, String response) {
+        logger.info("Response message: " + response);
+        client.getOutput().println(response);
+        client.getOutput().flush();
     }
 
-    public static String powMsg(int number){
-        logger.info("Calculate power for number = " + number);
-        return number + "^2 = " + number * number;
-    }
-
-    public static void sendMsg(PrintWriter out, String msg) {
-        logger.info("Response message: " + msg);
-        out.println(msg);
-        out.flush();
-    }
-
-    public static void remove(Socket client) {
+    public static void remove(IClient client) {
         clients.removeIf(clientHandler -> clientHandler.getClient() == client);
         logger.info("Removed client from list");
         logger.info("Total number of clients: " + clients.size() );
     }
 
     public static void off() throws IOException {
-        for (ClientHandler client : clients) {
-            PrintWriter out = new PrintWriter( client.getClient().getOutputStream() );
-            sendMsg(out, "off");
+        for (ClientHandler clientHandler : clients) {
+            send(clientHandler.getClient(), "off");
         }
     }
 }
