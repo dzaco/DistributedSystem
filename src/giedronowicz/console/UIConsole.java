@@ -27,4 +27,14 @@ public class UIConsole {
     public void exit() {
         logger.info("Ending process");
     }
+
+    public String getClientType() {
+        String type;
+        do {
+            logger.type("What kind of connection you choose\n");
+            logger.type("tcp / udp : ");
+            type = keyboard.nextLine();
+        }while (!type.equals("tcp") && !type.equals("udp"));
+        return type;
+    }
 }

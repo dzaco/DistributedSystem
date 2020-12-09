@@ -10,8 +10,13 @@ public class ClientSite {
 
     public static void main(String... args) throws IOException {
 
-        IClient client = new ClientUDP();
         UIConsole console = new UIConsole();
+        String type = console.getClientType();
+        IClient client;
+        if(type.equals("tcp"))
+            client = new ClientTCP();
+        else
+            client = new ClientUDP();
 
         mainLoop:
         while (true) {
