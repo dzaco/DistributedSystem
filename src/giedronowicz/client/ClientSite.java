@@ -4,15 +4,13 @@ import giedronowicz.console.Logger;
 import giedronowicz.console.UIConsole;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class ClientSite {
     private static Logger logger = Logger.of(ClientSite.class);
 
     public static void main(String... args) throws IOException {
 
-
-        IClient<Socket> client = new ClientTCP();
+        IClient client = new ClientUDP();
         UIConsole console = new UIConsole();
 
         mainLoop:

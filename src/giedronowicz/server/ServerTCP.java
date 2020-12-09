@@ -37,10 +37,9 @@ public class ServerTCP {
 
     }
 
-    public static void send(IClient client, String response) {
+    public static void send(IClient client, String response) throws IOException {
         logger.info("Response message: " + response);
-        client.getOutput().println(response);
-        client.getOutput().flush();
+        client.write(response);
     }
 
     public static void remove(IClient client) {

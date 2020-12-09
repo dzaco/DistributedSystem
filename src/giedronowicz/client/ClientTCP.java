@@ -53,8 +53,9 @@ public class ClientTCP implements IClient<Socket>{
     }
 
     @Override
-    public void write(String request) {
+    public void write(String request) throws IOException {
         logger.info("Writing request: " + request);
+        if(this.getOutput() == null ) throw new IOException("Output stream is null");
         this.getOutput().println(request);
         this.getOutput().flush();
     }
@@ -69,12 +70,10 @@ public class ClientTCP implements IClient<Socket>{
         return this.getSocket().getPort();
     }
 
-    @Override
     public BufferedReader getInput() {
         return this.in;
     }
 
-    @Override
     public PrintWriter getOutput() {
         return this.out;
     }
@@ -93,7 +92,7 @@ public class ClientTCP implements IClient<Socket>{
 
 
 
-    public void exit() {
+    public void exit() throws IOException {
         this.write("exit");
     }
 }

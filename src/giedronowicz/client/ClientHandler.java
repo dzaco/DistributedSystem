@@ -1,7 +1,6 @@
 package giedronowicz.client;
 
 import giedronowicz.console.Logger;
-import giedronowicz.server.PowService;
 import giedronowicz.server.Request;
 import giedronowicz.server.ServerTCP;
 
@@ -32,31 +31,7 @@ public class ClientHandler implements Runnable {
                 Request request = new Request(client.read());
                 logger.info("Request: " + request);
 
-                String response = switch (request.getCommand()) {
-                    case "exit" -> {
-                        logger.info("One of the clients is off now");
-                        ServerTCP.remove(client);
-                        yield request.getCommand();
-                    }
-                    case "off" -> {
-                        logger.info("Client " + client + " shutdown this server");
-                        ServerTCP.off();
-                        yield request.getCommand();
-                    }
-                    case "pow" -> {
-                        var res = request.getParam().map(PowService::pow);
-                        if(res.isPresent()) yield String.valueOf(res.get());
-                        else {
-                            logger.error("Command need parameter");
-                            yield "Command need parameter";
-                        }
-                    }
-
-                    default -> {
-                        logger.error("Unknown command");
-                        yield "Unknown command";
-                    }
-                };
+                String response = RequestHandler.handle(request);
 
                 ServerTCP.send(client, response);
                 

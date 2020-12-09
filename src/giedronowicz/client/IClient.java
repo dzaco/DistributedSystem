@@ -12,11 +12,9 @@ public interface IClient<T> {
     void bind(String address, int port) throws IOException;
     void close() throws IOException;
     String read() throws IOException;
-    void write(String request);
+    void write(String request) throws IOException;
     InetAddress getAddress();
     int getPort();
-    BufferedReader getInput();
-    PrintWriter getOutput();
     T getSocket();
-    void exit();
+    void exit() throws IOException;
 }
